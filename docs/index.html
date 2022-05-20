@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#add_num">add_num</a></li><li><a href="global.html#anti_shake">anti_shake</a></li><li><a href="global.html#axios_interceptors">axios_interceptors</a></li><li><a href="global.html#cavar_type">cavar_type</a></li><li><a href="global.html#chunk_towArray">chunk_towArray</a></li><li><a href="global.html#clone_dep">clone_dep</a></li><li><a href="global.html#count_down">count_down</a></li><li><a href="global.html#format">format</a></li><li><a href="global.html#fuzzy_search">fuzzy_search</a></li><li><a href="global.html#generateAsyncRoutes">generateAsyncRoutes</a></li><li><a href="global.html#get_data">get_data</a></li><li><a href="global.html#get_filter">get_filter</a></li><li><a href="global.html#isExternal">isExternal</a></li><li><a href="global.html#numUtilsFnc">numUtilsFnc</a></li><li><a href="global.html#obj_arr_str_for">obj_arr_str_for</a></li><li><a href="global.html#remove_repetition">remove_repetition</a></li><li><a href="global.html#throttle">throttle</a></li><li><a href="global.html#vue_router_push_replace">vue_router_push_replace</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+    <section class="package">
+        <h3>suifeng_utils_app 0.0.3</h3>		
+    </section>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <section class="readme usertext">
+        <article><p>[1] cavar_type  [查询参数类型] 判断参数类型。 返回参数小写单词
+1. currTask   [any]</p>
+<p>[2] get_data  [读取参数时当，参数不存在时做什么反应]
+1.dataObj  [必传值]  object|string|number|boolean|bigint|sybmol|array
+2.dataKey  [必传值]  string
+3.redirectValue [当参数不存在或者是null&amp;undefined时返回值]  除function, default is empty object</p>
+<p>[3] get_filter [过滤] 对数组、字符串、对象进行过滤 当传入非规定类型数据时提示报错并且返回一个空数组以免页面出现基本问题
+1. data[必传值]  array|object|string
+2. callback[必传值]  function</p>
+<p>[4] anti_shake [防抖] 对特殊事件进行防抖操作，且只执行最后一次当前传入的callback函数
+1. callback[必传值] function
+2. dayNum  number|string   default is 300 延时时间  如果字符串isNaN后结果为true把dayNum重置为300</p>
+<p>[5] throttle [节流]
+1. callback[必传值] function
+2. dayNum  number|string   default is 300 延时时间  如果字符串isNaN后结果为true把dayNum重置为300</p>
+<p>[6] chunk [普通数组拆分为二维数组]  返回值是优先去重再去拆分二维数组
+1. arr[必传值] Array
+2. arrNum number default is 1，拆分成二维数组的每一个数组的成员个数</p>
+<p>[7] remove_repetition [数组去重]  如果传递参数错误时，会返回空数组  只针对一维数组和数组成员是number|string|null|undefined
+1. arr[必传值] Array
+2. task Object   【暂无】
+2.1 dep[可选值] Boolean  default is false  为true时开启深度去重</p>
+<p>[8] obj_arr_str_for [循环]   数组\对象\字符串进行循环操作
+注：（1）当第一个参数传入【数组类型】的数据时正常使用 callback函数可接受形参【3】个参数 item：每一个成员；index:对应索引；arr:调用方法的原数组
+（2）当第一个参数传入【对象类型】的数据时正常使用 callback函数可接受形参【2】个参数 arr:调用方法的原对象；key:每一个成员的key值
+（3） 当第一个参数传入【字符串类型】的数据时正常使用 callback函数可接受形参【3】个参数 item：每一个成员；index:对应索引；arr:调用方法的原字符串 且请注意需要进行return才能返回修改后字符串的值；【注】不会影响原字符串，会返回一组新的字符串
+1. data[必传值]  array|object|string
+2. callback[必传值] function</p>
+<p>[9] clone_dep [深拷贝] 这针对于数组或者对象进行递归操作
+1. data[必传值] object|array</p>
+<p>[10] vue_router_push_replace[重写了vue-router的push&amp;&amp;replace方法并且可以集中处理报错]
+1. VueRouter vue中use后的vue-router实例[必传值]
+2. push_callback[可选值] 默认是function
+3. replace_callback[可选值] 默认是function</p>
+<p>[11] axios_interceptors [axios的interceptors的request&amp;response的二次封装]
+1. instance[必传值]axios实例
+2. task[可传值] 必须是object类型数据
+2.1.   request_sucss[请求成功回调]
+2.2.   request_error[请求失败回调]
+2.3.   response_sucss[响应成功回调]
+2.4.   response_error[响应失败回调]</p>
+<p>[12] fuzzy_search [模糊搜索] 只针对数组
+1. list [必传值] array
+2. keyword[可传值] string|number
+3. task[可传值] function  如果需要解析的数组中成员是一组对象的话需要该条件解析 需要return该解析的条件
+3.1 arr 接收一个数组
+3.2 i 经过循环的索引</p>
+<p>[13] add_num [两数相加]
+1. augend[必传值] number
+2. addend[必传值] number</p>
+<p>[14] format [当前时间]
+1. date [必传值] number|string  new Date()的实例化对象或毫秒的时间戳
+2. fmt 规则 string “yyyy-MM-dd hh:mm:ss.S”  y: 年、M：月、d：日、h：小时、m：分钟、s：秒、S：分秒</p>
+<p>[15] generateAsyncRoutes [动态路由重组真实路由]
+1. permissionList[必传值] Array
+2. AllRoutes[项目内部全部路由] Object
+3. children[可选值] boolean 是否是子路由 default is true [注：此方法在react等其他工程使用需要改变]</p>
+<p>[16] isExternal[判断是否是一个外部链接]
+1. path [必传值] string url链接</p>
+<p>[17] count_down[特殊字符数组排数]
+1. arr [数组内部是字符例如：'11,22']
+2. targets [标记分隔符例如：',']</p>
+<p>[18] 金钱数据重组，
+1. data number数组类型数据
+2. target string重组后以什么分隔</p></article>
+    </section>
+
+
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Fri May 20 2022 16:28:35 GMT+0800 (中国标准时间) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<noscript>垃圾手机别用，请更换远峰蓝</noscript>
+
+</body>
+</html>
