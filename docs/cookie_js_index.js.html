@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>format/index.js - Documentation</title>
+    <title>cookie_js/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">format/index.js</h1>
+    <h1 class="page-title">cookie_js/index.js</h1>
     
 
     
@@ -42,39 +42,56 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * 功能：当前时间
- * @param {number|string} date - new Date()的实例化对象或毫秒的时间戳
- * @param {string} fmt - 规则 string “yyyy-MM-dd hh:mm:ss.S”  y: 年、M：月、d：日、h：小时、m：分钟、s：秒、S：分秒
- * @returns {string} -深拷贝对象或数组
+            <pre class="prettyprint source linenums"><code>import cookie from "cookiejs";
+import cavar_type from "cavar_type";
+/**
+ * 功能：cookie操作函数, 建议在做任何操作前先看一下当前代码的远吗
+ * @param {any}  any - 所有操作建议先观看源码
+ * @returns {undefined} - undefined
  */
-function format(date, fmt) {
-    var o = {
-      "M+": date.getMonth() + 1, //月份
-      "d+": date.getDate(), //日
-      "h+": date.getHours(), //小时
-      "m+": date.getMinutes(), //分
-      "s+": date.getSeconds(), //秒
-      "q+": Math.floor((date.getMonth() + 3) / 3), //季度
-      S: date.getMilliseconds(), //毫秒
-    };
-    if (/(y+)/.test(fmt)) {
-      fmt = fmt.replace(
-        RegExp.$1,
-        (date.getFullYear() + "").substr(4 - RegExp.$1.length)
-      );
-    }
-    for (var k in o) {
-      if (new RegExp("(" + k + ")").test(fmt)) {
-        fmt = fmt.replace(
-          RegExp.$1,
-          RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
-        );
-      }
-    }
-    return fmt;
+
+// 查看本地cookie
+function get(name) {
+  if (cavar_type(name) === "string") {
+    return cookie.get(name);
   }
-  export default format;</code></pre>
+  return console.error("name is not string type");
+}
+
+
+// 删除单个,也可以删除多个
+function remove() {
+  cookie.remove(...arguments);
+}
+// 删除所有cookie   直接调用即可清除所有cookie
+function clear() {
+  return cookie.clear();
+}
+// Get所有cookie   直接调用即可读取所有cookie
+function all() {
+  return cookie.all();
+}
+function cookie_js() {
+  return cookie(...arguments);
+}
+// 自身属性 get 函数   name   string - 需要读取cookie的key
+cookie_js.get = get;
+// 自身属性 remove 函数 name   string - 可以删除多个cookie
+cookie_js.remove = remove;
+// 自身函数 clear 函数  -  删除所有cookie   直接调用即可清除所有cookie
+cookie_js.clear = clear;
+cookie_js.all = all;
+// 自身函数 set 函数    - 与cookiejs保持一致
+//         5.1 key   string  - 存储cookie的键
+//         5.2 value  json   - 存储cookie的值
+//         5.3 options object- 配置https｜path|day
+//             5.3.1 expires   number - 配置有效时间
+//             5.3.2 path      string - cookie生效地址，默认是‘/’
+//             5.3.3 secure    boolean - 是否种在https协议的路径下，default false
+//             5.3.4 domain    string - 指示一个有效域，其中cookie应该是可见的。cookie对所有子域也是可见的。
+cookie_js.set = cookie.set;
+export default cookie_js;
+</code></pre>
         </article>
     </section>
 
