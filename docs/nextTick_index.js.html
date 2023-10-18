@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>cavar_type/index.js - Documentation</title>
+    <title>nextTick/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">cavar_type/index.js</h1>
+    <h1 class="page-title">nextTick/index.js</h1>
     
 
     
@@ -42,18 +42,21 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
-* 功能：判断数据类型功能函数
-* @param {Any} currTask - 判断类型的格式
-* @returns {String} - 返回传入的参数类型，以小写字符串的形式返回
-*/
-function cavar_type(currTask) {
-    return Object.prototype.toString
-      .call(currTask)
-      .slice(8, -1)
-      .toLocaleLowerCase();
+            <pre class="prettyprint source linenums"><code> /**
+ * 功能：nextTick
+ * @param {function} fn - callback回调函数
+ * @param {string} mode - 触发开关 默认是promise
+ * @returns {undefined} undefined
+ */
+ 
+ function nextTick(fn= () => {}, mode='') {
+    if (mode === "setTimeout") {
+      setTimeout(fn, 10);
+    } else {
+      Promise.resolve().then(fn);
+    }
   }
-export default cavar_type</code></pre>
+  export default nextTick</code></pre>
         </article>
     </section>
 

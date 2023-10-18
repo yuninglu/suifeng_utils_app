@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>cavar_type/index.js - Documentation</title>
+    <title>setCache/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">cavar_type/index.js</h1>
+    <h1 class="page-title">setCache/index.js</h1>
     
 
     
@@ -43,17 +43,23 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
-* 功能：判断数据类型功能函数
-* @param {Any} currTask - 判断类型的格式
-* @returns {String} - 返回传入的参数类型，以小写字符串的形式返回
-*/
-function cavar_type(currTask) {
-    return Object.prototype.toString
-      .call(currTask)
-      .slice(8, -1)
-      .toLocaleLowerCase();
+ * 功能：写入缓存数据
+ * @param {string} key
+ * @param {any} value
+ * @param {string} type: 缓存类型 'local'(默认) / session;
+ * @returns {undefined} undefined
+ */
+function setCache(key='', value='', type = "local") {
+    switch (type) {
+      case "session":
+        sessionStorage.setItem(key, JSON.stringify(value));
+        break;
+      default:
+        localStorage.setItem(key, JSON.stringify(value));
+        break;
+    }
   }
-export default cavar_type</code></pre>
+  export default setCache</code></pre>
         </article>
     </section>
 

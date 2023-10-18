@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>cavar_type/index.js - Documentation</title>
+    <title>useGMSCallback/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">cavar_type/index.js</h1>
+    <h1 class="page-title">useGMSCallback/index.js</h1>
     
 
     
@@ -43,17 +43,41 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
-* 功能：判断数据类型功能函数
-* @param {Any} currTask - 判断类型的格式
-* @returns {String} - 返回传入的参数类型，以小写字符串的形式返回
-*/
-function cavar_type(currTask) {
-    return Object.prototype.toString
-      .call(currTask)
-      .slice(8, -1)
-      .toLocaleLowerCase();
-  }
-export default cavar_type</code></pre>
+ * 功能：发布自定义事件
+ * @param {object} actions - 目标对象，自定义事件发送的参数
+ * @param {string} eventName - 触发自定义事件的名字 默认是onGMSMessageSent
+ * @returns {object} removeEventListener - 触发该方法删除自定义事件
+ */
+
+const useGMSCallback = (actions, eventName='onGMSMessageSent') => {
+  const actionsRef = {};
+
+  actionsRef.current = actions;
+  //广播消息
+  const eventHandler = ({ data }) => {
+    const currentActions = actionsRef.current;
+    if (Array.isArray(currentActions)) {
+      const actionItem = currentActions.find((item) => item.type === data.type);
+
+      if (actionItem) {
+        actionItem.callback(data);
+      }
+    } else {
+      if (currentActions.type === data.type) {
+        currentActions.callback(data);
+      }
+    }
+  };
+  window.addEventListener(eventName, eventHandler);
+  return {
+    removeEventListener: () => {
+      window.removeEventListener(eventName, eventHandler);
+    },
+  };
+};
+
+export default useGMSCallback;
+</code></pre>
         </article>
     </section>
 
