@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>count_down/index.js - Documentation</title>
+    <title>deepClone/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">count_down/index.js</h1>
+    <h1 class="page-title">deepClone/index.js</h1>
     
 
     
@@ -42,36 +42,33 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * 功能：金钱相关特殊字符数组排数
- * @param {array} arr - 目标数组 成员为数组或者字符串
- * @param {string} targets - 标记分隔符例如：','
- * @returns {array} - 数组，如果没有满足执行函数return 值的函数规则时 返回空数组
- */
+            <pre class="prettyprint source linenums"><code>import cavar_type from "../cavar_type";
 
-function count_down(arr, targets) {
-    function task(tarData, tars) {
-      return tarData.indexOf(tars) == "-1" ? "0" : tarData.indexOf(tars);
+/**
+ * 功能：深拷贝对象或数组-检测该属性是否为对象本身的属性(不能拷贝原型对象的属性)
+ * @param {any} data - 目标对象
+ * @returns {object|array} -深拷贝对象或数组
+ */
+const deepClone = (target) => {
+    //检测数据的类型
+    if (typeof target === 'object' &amp;&amp; target !== null) {
+      //创建一个容器
+      const result = Array.isArray(target) ? [] : {};
+      //遍历对象
+      for (let key in target) {
+        //检测该属性是否为对象本身的属性(不能拷贝原型对象的属性)
+        if (target.hasOwnProperty(key)) {
+          //拷贝
+          result[key] = deepClone(target[key]);
+        }
+      }
+      return result;
+    } else {
+      return target;
     }
-    var newArr = [];
-    arr.forEach((item) => {
-      newArr[task(item, targets)] = newArr[task(item, targets)]
-        ? newArr[task(item, targets)]
-        : [];
-      newArr[task(item, targets)].push(item);
-    });
-    for (let i = 0; i &lt; newArr.length; i++) {
-      newArr[i].sort((a, b) => {
-        a = a.split(targets).join("");
-        b = b.split(targets).join("");
-        return a - b;
-      });
-    }
-    return newArr.reduce((pre, cur) => {
-      return pre.concat(cur);
-    }, []);
-  }
-  export default count_down;</code></pre>
+  };
+export default deepClone;
+</code></pre>
         </article>
     </section>
 

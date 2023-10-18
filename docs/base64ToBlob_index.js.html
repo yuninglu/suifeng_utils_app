@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>count_down/index.js - Documentation</title>
+    <title>base64ToBlob/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">count_down/index.js</h1>
+    <h1 class="page-title">base64ToBlob/index.js</h1>
     
 
     
@@ -43,35 +43,21 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * 功能：金钱相关特殊字符数组排数
- * @param {array} arr - 目标数组 成员为数组或者字符串
- * @param {string} targets - 标记分隔符例如：','
- * @returns {array} - 数组，如果没有满足执行函数return 值的函数规则时 返回空数组
+ * 功能：图片base64转换为blob
+ * @param {string} base64Url
+ * @returns {Blob} - Blob对象
  */
-
-function count_down(arr, targets) {
-    function task(tarData, tars) {
-      return tarData.indexOf(tars) == "-1" ? "0" : tarData.indexOf(tars);
+function base64ToBlob(base64Url='') {
+    var bytes = window.atob(base64Url.split(',')[1]) // 去掉url的头，并转换为byte
+    //处理异常,将ascii码小于0的转换为大于0
+    var ab = new ArrayBuffer(bytes.length)
+    var ia = new Uint8Array(ab)
+    for (var i = 0; i &lt; bytes.length; i++) {
+      ia[i] = bytes.charCodeAt(i)
     }
-    var newArr = [];
-    arr.forEach((item) => {
-      newArr[task(item, targets)] = newArr[task(item, targets)]
-        ? newArr[task(item, targets)]
-        : [];
-      newArr[task(item, targets)].push(item);
-    });
-    for (let i = 0; i &lt; newArr.length; i++) {
-      newArr[i].sort((a, b) => {
-        a = a.split(targets).join("");
-        b = b.split(targets).join("");
-        return a - b;
-      });
-    }
-    return newArr.reduce((pre, cur) => {
-      return pre.concat(cur);
-    }, []);
+    return new Blob([ab], { type: 'image/png' })
   }
-  export default count_down;</code></pre>
+  export default  base64ToBlob</code></pre>
         </article>
     </section>
 

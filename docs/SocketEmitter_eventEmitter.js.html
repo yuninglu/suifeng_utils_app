@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>count_down/index.js - Documentation</title>
+    <title>SocketEmitter/eventEmitter.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">count_down/index.js</h1>
+    <h1 class="page-title">SocketEmitter/eventEmitter.js</h1>
     
 
     
@@ -43,35 +43,61 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * 功能：金钱相关特殊字符数组排数
- * @param {array} arr - 目标数组 成员为数组或者字符串
- * @param {string} targets - 标记分隔符例如：','
- * @returns {array} - 数组，如果没有满足执行函数return 值的函数规则时 返回空数组
+ * 自定义事件
+ * author hjj
  */
 
-function count_down(arr, targets) {
-    function task(tarData, tars) {
-      return tarData.indexOf(tars) == "-1" ? "0" : tarData.indexOf(tars);
-    }
-    var newArr = [];
-    arr.forEach((item) => {
-      newArr[task(item, targets)] = newArr[task(item, targets)]
-        ? newArr[task(item, targets)]
-        : [];
-      newArr[task(item, targets)].push(item);
-    });
-    for (let i = 0; i &lt; newArr.length; i++) {
-      newArr[i].sort((a, b) => {
-        a = a.split(targets).join("");
-        b = b.split(targets).join("");
-        return a - b;
-      });
-    }
-    return newArr.reduce((pre, cur) => {
-      return pre.concat(cur);
-    }, []);
+
+class EventEmitter {
+  constructor() {
+    this.events = {};
   }
-  export default count_down;</code></pre>
+  getEvents() {
+    return this.events;
+  }
+  once(eventName='', listener) {
+    return this.on(eventName, listener, 0);
+  }
+  on(eventName='', listener, timer = -1) {
+    let listeners = this.getListeners(eventName);
+    listeners.push({
+      listener,
+      timer,
+    });
+  }
+  emit(eventName='', ...args) {
+    return this.trigger(eventName, args);
+  }
+  remove(eventName='') {
+    this.events[eventName] &amp;&amp; delete this.events[eventName];
+  }
+  off(eventName='', listener) {
+    let listeners = this.getListeners(eventName);
+    let index = listeners.findIndex((item) => item.listener === listener);
+    index !== -1 &amp;&amp; listeners.splice(index, 1);
+  }
+  clear() {
+    this.events = {};
+  }
+  trigger(eventName='', args) {
+    let listeners = this.getListeners(eventName);
+    for (let i = 0; i &lt; listeners.length; i++) {
+      let listener = listeners[i];
+      if (listener) {
+        listener.listener.apply(this, args || []);
+        listener.timer === 0 &amp;&amp; listeners.splice(i, 1);
+        listeners.length === 0 &amp;&amp; delete this.events[eventName];
+        listener.timer !== -1 &amp;&amp; listener.timer--;
+      }
+    }
+  }
+  getListeners(eventName='') {
+    return this.events[eventName] || (this.events[eventName] = []);
+  }
+}
+
+export default EventEmitter;
+</code></pre>
         </article>
     </section>
 

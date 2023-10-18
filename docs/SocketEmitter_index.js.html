@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>count_down/index.js - Documentation</title>
+    <title>SocketEmitter/index.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">count_down/index.js</h1>
+    <h1 class="page-title">SocketEmitter/index.js</h1>
     
 
     
@@ -43,35 +43,80 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * 功能：金钱相关特殊字符数组排数
- * @param {array} arr - 目标数组 成员为数组或者字符串
- * @param {string} targets - 标记分隔符例如：','
- * @returns {array} - 数组，如果没有满足执行函数return 值的函数规则时 返回空数组
+ * 功能：自定义事件
+ * @param {string} on / emeit等
+ * @param {string} callback
+ * @returns {any} - any
  */
 
-function count_down(arr, targets) {
-    function task(tarData, tars) {
-      return tarData.indexOf(tars) == "-1" ? "0" : tarData.indexOf(tars);
-    }
-    var newArr = [];
-    arr.forEach((item) => {
-      newArr[task(item, targets)] = newArr[task(item, targets)]
-        ? newArr[task(item, targets)]
-        : [];
-      newArr[task(item, targets)].push(item);
-    });
-    for (let i = 0; i &lt; newArr.length; i++) {
-      newArr[i].sort((a, b) => {
-        a = a.split(targets).join("");
-        b = b.split(targets).join("");
-        return a - b;
-      });
-    }
-    return newArr.reduce((pre, cur) => {
-      return pre.concat(cur);
-    }, []);
+import EventEmitter from "./eventEmitter";
+
+class SocketEmitter extends EventEmitter {
+  constructor() {
+    super();
+    this.sokectEvents = [];
+    this.subActions = {};
   }
-  export default count_down;</code></pre>
+
+  disconnect() {
+    this.clear();
+    this.sokect &amp;&amp; this.sokect.disconnect();
+    this.sokect = null;
+  }
+
+  /**
+   * 抽象socket监听方法
+   * @param {*} param0
+   */
+  subscribe(eventName='', listener) {
+    this.on(eventName, listener);
+    if (this.sokectEvents.includes(eventName) || !this.sokect) {
+      return;
+    }
+    this.sokectEvents.push(eventName);
+    this.subActions[eventName] = this.subAction(eventName);
+    this.sokect &amp;&amp; this.sokect.on(eventName, this.subActions[eventName]);
+    console.debug(`socket.io listener event -> ${eventName}`);
+  }
+
+  subAction(eventName='') {
+    return (data) => {
+      let json;
+      try {
+        json = JSON.parse(data);
+      } catch (e) {
+        json = data;
+      }
+      this.emit(eventName, json);
+    };
+  }
+
+  /**
+   * 抽象socket监听方法
+   * @param {*} param0
+   */
+  unsubscribe(eventName='', listener) {
+    this.off(eventName, listener);
+    this.sokect &amp;&amp; this.sokect.off(eventName, this.subActions[eventName]);
+    delete this.subActions[eventName];
+    this.sokectEvents = this.sokectEvents.filter((v) => v !== eventName);
+    console.debug(`socket.io unlistener event -> ${eventName}`);
+  }
+}
+const _global = window ;
+const event = new SocketEmitter();
+
+const LMEvent = (function () {
+  if (_global._LM_EVENT_) {
+    return _global._LM_EVENT_;
+  } else {
+    _global._LM_EVENT_ = event;
+    return event;
+  }
+})();
+
+export default LMEvent;
+</code></pre>
         </article>
     </section>
 
